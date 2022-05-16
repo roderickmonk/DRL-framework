@@ -1,0 +1,8 @@
+main.py \
+training=false \
+episodes=20000 \
+log_interval=2500 \
+randomize_dataset_reads=false \
+datasets=[test_set_snt] \
+csv_path=5A \
+network=5A10MDeeper

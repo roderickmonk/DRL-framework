@@ -1,0 +1,57 @@
+console: logging # logging | progress_bar
+
+defaults_:                              ${env:CO3_PATH}/co3-configurations/dev/playback_defaults_optuna.yaml
+
+playbacks:
+
+  sample_optuna:
+
+    agent:
+      categorical:
+        agent:                          [ddpg.ddpg_agent]
+
+      episodes:                         200
+      batch_size:                       64                         
+      buffer_size:                      64                         
+      network:                          networks/sample_optuna
+
+      torch_models:
+        Actor:
+          hidden_dims:                  [400, 300]
+          activations:                  [nn.ReLU]
+        Critic:
+          hidden_dims:                  [400, 300]
+          activations:                  [nn.ReLU]
+
+    env_config:
+      env_name:                         sentient_gym:SellOrderbookDataFrameEnv-v0
+      is_buy:                           False
+      ql:                               0.2
+      datasets:                         [datasets/test/ob_sell_test_set_snt.json]
+      precision:                        8
+      pdf:
+        name:                           pdf-test-6
+        envId:                          0
+        exchange:                       bittrex
+        market:                         btc-eth
+        start_window:                   90 # days
+        start_range:                    2018-01-15T12:30:00
+        end_range:                      2019-07-15T13:00:00
+
+    child_process:
+      misc:
+        generate_csv:                   True
+
+      env_config:
+        randomize_dataset_reads:        False
+        datasets:                       [datasets/test/ob_sell_test_set_snt.json]
+
+    misc:
+      generate_csv:                     False
+
+
+
+playback:                           sample_optuna
+
+
+

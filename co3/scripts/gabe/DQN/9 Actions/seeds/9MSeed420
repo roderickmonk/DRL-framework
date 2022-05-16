@@ -1,0 +1,6 @@
+main.py \
+episodes=9000000 \
+generate_csv=false \
+network=9A9MSeed420 \
+order_depths=order_depths_5 \
+seed=420

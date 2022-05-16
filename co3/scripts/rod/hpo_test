@@ -1,0 +1,63 @@
+#!/bin/bash
+
+STUDY=random-median
+optuna delete-study --study-name $STUDY --storage $HPO_REDIS_STORAGE &> /dev/null
+time hpo_study.py data_path=/srv/dvc/dataset.pt study=$STUDY
+
+STUDY=random-percentile
+optuna delete-study --study-name $STUDY --storage $HPO_REDIS_STORAGE &> /dev/null
+time hpo_study.py data_path=/srv/dvc/dataset.pt study=$STUDY
+
+STUDY=random-successive-halving
+optuna delete-study --study-name $STUDY --storage $HPO_REDIS_STORAGE &> /dev/null
+time hpo_study.py data_path=/srv/dvc/dataset.pt study=$STUDY
+
+STUDY=random-hyperband
+optuna delete-study --study-name $STUDY --storage $HPO_REDIS_STORAGE &> /dev/null
+time hpo_study.py data_path=/srv/dvc/dataset.pt study=$STUDY
+
+STUDY=random-threshold
+optuna delete-study --study-name $STUDY --storage $HPO_REDIS_STORAGE &> /dev/null
+time hpo_study.py data_path=/srv/dvc/dataset.pt study=$STUDY
+
+# TPESampler
+STUDY=tpe-median
+optuna delete-study --study-name $STUDY --storage $HPO_REDIS_STORAGE &> /dev/null
+time hpo_study.py data_path=/srv/dvc/dataset.pt study=$STUDY
+
+STUDY=tpe-percentile
+optuna delete-study --study-name $STUDY --storage $HPO_REDIS_STORAGE &> /dev/null
+time hpo_study.py data_path=/srv/dvc/dataset.pt study=$STUDY
+
+STUDY=tpe-successive-halving
+optuna delete-study --study-name $STUDY --storage $HPO_REDIS_STORAGE &> /dev/null
+time hpo_study.py data_path=/srv/dvc/dataset.pt study=$STUDY
+
+STUDY=tpe-hyperband
+optuna delete-study --study-name $STUDY --storage $HPO_REDIS_STORAGE &> /dev/null
+time hpo_study.py data_path=/srv/dvc/dataset.pt study=$STUDY
+
+STUDY=tpe-threshold
+optuna delete-study --study-name $STUDY --storage $HPO_REDIS_STORAGE &> /dev/null
+time hpo_study.py data_path=/srv/dvc/dataset.pt study=$STUDY
+
+# CmaEsSampler
+STUDY=cmaes-median
+optuna delete-study --study-name $STUDY --storage $HPO_REDIS_STORAGE &> /dev/null
+time hpo_study.py data_path=/srv/dvc/dataset.pt study=$STUDY
+
+STUDY=cmaes-percentile
+optuna delete-study --study-name $STUDY --storage $HPO_REDIS_STORAGE &> /dev/null
+time hpo_study.py data_path=/srv/dvc/dataset.pt study=$STUDY
+
+STUDY=cmaes-successive-halving
+optuna delete-study --study-name $STUDY --storage $HPO_REDIS_STORAGE &> /dev/null
+time hpo_study.py data_path=/srv/dvc/dataset.pt study=$STUDY
+
+STUDY=cmaes-hyperband
+optuna delete-study --study-name $STUDY --storage $HPO_REDIS_STORAGE &> /dev/null
+time hpo_study.py data_path=/srv/dvc/dataset.pt study=$STUDY
+
+STUDY=cmaes-threshold
+optuna delete-study --study-name $STUDY --storage $HPO_REDIS_STORAGE &> /dev/null
+time hpo_study.py data_path=/srv/dvc/dataset.pt study=$STUDY

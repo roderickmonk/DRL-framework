@@ -1,0 +1,46 @@
+#!/usr/bin/env python
+
+from constants import CO3_PATH
+from dataset import Dataset
+
+
+def main() -> None:
+
+    st = Dataset()
+
+    original_dataset = CO3_PATH + "datasets/evaluate/FEDCBA9876543210.json"
+    demo_dataset = CO3_PATH + "datasets/demo.json"
+
+    # demo assumes the following dataset is available
+    df_original = st.read(source=original_dataset)
+    print("Retrieved original data and created a new DF")
+
+    # Write it back to the db under a new name
+    st.persist(source=df_original, dest=demo_dataset, overwrite=True)
+
+    print("Saved the DF under a new name 'demo_dataset'")
+
+    assert demo_dataset in st.ls()
+    print("'demo' found")
+
+    # Read it back again into a different DF
+    df_demo = st.read(source=demo_dataset)
+    print("Retrieved 'demo_dataset' dataset and created a new DF")
+
+    # Make sure that both DFs are the same
+    assert df_original.equals(df_demo), "Dataframes do not match"
+    print("Both DFs are the same")
+
+    st.purge(dataset=demo_dataset)
+
+    # Ensure that dataset "demo" has been purged
+    assert demo_dataset not in st.ls()
+    print("The 'demo' dataset has been purged")
+
+    print("Demo Successful")
+
+
+if __name__ == "__main__":
+
+    main()
+    print("That's All Folks")

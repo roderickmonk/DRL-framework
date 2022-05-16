@@ -1,0 +1,30 @@
+# Use root/example as user/password credentials
+version: '3.1'
+
+services:
+
+  mongo:
+    image: mongo:4.4.13
+    container_name: local-mongo
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${LOCALDB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${LOCALDB_PASSWORD}
+    volumes:
+      - "/mnt/xvdf1:/data/db"
+    command: mongod --setParameter maxSessions=1000000 --setParameter logicalSessionRefreshMillis=20000
+
+ 
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${LOCALDB_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${LOCALDB_PASSWORD}
+      ME_CONFIG_MONGODB_URL: mongodb://${LOCALDB_USERNAME}:${LOCALDB_PASSWORD}@mongo:27017/

@@ -1,0 +1,14 @@
+play03 \
+algorithm=q \
+episodes=2 \
+generate_csv=false \
+training=false \
+child_process.launch_interval=1 \
+child_process.csv_path=QR/NN/Single \
+network=QR2002A64NNodes_backup \
+order_depths=order_depths_1 \
+qrdqn.quantile_resolution=200 \
+network_nodes=64 \
+nn_trace.active=True \
+nn_trace.target_directory=QR/Single \
+nn_trace.count=20000

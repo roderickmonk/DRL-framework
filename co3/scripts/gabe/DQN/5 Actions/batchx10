@@ -1,0 +1,7 @@
+main.py \
+episodes=10000000 \
+generate_csv=false \
+network=5A10Mbatchx10 \
+batch_size=6400 \
+buffer_size=6401 \
+training_interval=6400

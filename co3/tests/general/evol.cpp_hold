@@ -1,0 +1,14 @@
+evol(vector<double> pv, vector<double> &evol)
+{
+    for (auto &x : pv)
+    {
+        double exp_vol = 0;
+        for (uint q = 0; q < pdf_x.size(); q++)
+            exp_vol += min(
+                           max(pdf_x[q] - x,
+                               0.0),
+                           QL) *
+                       pdf_y[q];
+        evol.push_back(exp_vol);
+    }
+}

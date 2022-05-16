@@ -1,0 +1,55 @@
+misc:
+  csv_path:                         rewards/test
+  generate_csv:                     False
+  leave_progress_bar:               True
+  log_interval:                     10
+  log_level:                        INFO 
+  seed:                             7
+  record_state:                     False 
+
+agent:
+  # action_noise:
+  #   type:                           OrnsteinUhlenbeck 
+  #   sigma:                          0.02
+  batch_size:                       32
+  buffer_size:                      640
+  episodes:                         1000
+  gamma:                            0.99 # Bellman discount factor
+  gradient_clipping:
+      max_norm:                     1.0
+      norm_type:                    2.0
+  purge_network:                    True
+  network:                          null
+  training:                         True
+  training_interval:                5 # Number of steps between trainings of the network
+  target_update_interval:           2 # Number of trainings between updating the target
+  tau:                              0.001 
+
+env_config:
+  action_space_low:                 -1.0
+  action_space_high:                0.0
+  envId:                            0
+  exchange:                         bittrex
+  reward_offset:                    1.0
+  randomize_dataset_reads:          True
+  pdf:
+    age_limit:                      60 # days, can be decimal; e.g. 0.25 = 6 hrs
+    bins:                           auto
+    graph:                          True
+
+child_process:
+  misc:
+    csv_path:                       rewards/test
+    generate_csv:                   True
+    log_interval:                   10
+    batch_size:                     2
+    buffer_size:                    32
+
+  agent:
+    episodes:                       10
+
+  launch_delay:                     50
+  launch_interval:                  100
+  env_config:
+    randomize_dataset_reads:        True
+

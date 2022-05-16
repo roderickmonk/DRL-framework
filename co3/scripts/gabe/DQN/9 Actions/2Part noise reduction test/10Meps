@@ -1,0 +1,5 @@
+main.py \
+episodes=10000000 \
+generate_csv=false \
+network=9A2part \
+order_depths=order_depths_5

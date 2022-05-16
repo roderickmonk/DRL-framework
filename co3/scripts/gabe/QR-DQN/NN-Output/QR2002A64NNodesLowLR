@@ -1,0 +1,12 @@
+play03 \
+algorithm=q \
+episodes=100000000 \
+generate_csv=false \
+child_process.csv_path=QR/NN/200_2A64Nodes_LowLR \
+network=QR2002A64NNodesLowLR \
+order_depths=order_depths_1 \
+qrdqn.quantile_resolution=200 \
+network_nodes=64 \
+nn_trace.active=True \
+nn_trace.target_directory=QR/200_2A64Nodes_LowLR \
+learning_rate=0.000075

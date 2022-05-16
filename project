@@ -1,0 +1,135 @@
+#!/bin/bash
+
+# Ensure any existing python environments are deactivated
+set -e
+conda deactivate >/dev/null 2>&1 || true
+deactivate >/dev/null 2>&1 || true
+set +e
+
+export CO3_PATH=$PWD
+
+export PATH=$PATH:$CO3_PATH/co3:$CO3_PATH/co3/scripts:$CO3_PATH/co3/tools:$CO3_PATH/co3/scripts/rod:$CO3_PATH/co3/scripts/gabriel:$CO3_PATH/co3/cron
+
+export PYTHONPATH=$CO3_PATH/co3:$CO3_PATH/co3/modules:$CO3_PATH/co3/generate:$CO3_PATH/co3/environments/modules:$CO3_PATH/co3/agents:$CO3_PATH/co3/environments/episode_types:$CO3_PATH/co3/environments/get_reward
+
+# not optimizatized
+export PYTHONOPTIMIZE=
+
+# Activate the Python environment
+source $CO3_PATH/bin/activate
+
+export NOMINAL_CONFIG=$CO3_PATH/co3-configurations/dev/nominal-config/co3.yaml
+
+# Aliases
+alias co3='co3.py'
+alias c03=co3
+alias playback='co3.py'
+alias recover_orderbooks='recover_orderbooks.py'
+alias dqn='playback playback=sample_dqn'
+
+ddpg () { 
+    co3.py playback=sample_ddpg; 
+}
+ppo () { 
+    co3.py playback=sample_ppo; 
+}
+alias actor_critic='playback playback=sample_actor_critic'
+alias gac='playback playback=sample_gac'
+alias qrdqn='playback playback=sample_qrdqn'
+alias sac='playback playback=sample_sac'
+alias td3='playback playback=sample_td3'
+alias generate='generate.py '
+
+unalias ddpg_pytest 2>/dev/null || true;
+ddpg_pytest () {
+    time PYTHONOPTIMIZE= pytest -x --disable-warnings co3/tests/general/test_ddpg_with_pendulum.py --log-level=INFO --log-cli-level=ERROR --log-cli-format="%(asctime)-15s %(message)s" --log-date-format="%Y-%m-%d %H:%M:%S"
+}
+
+alias qrdqn_pytest='time PYTHONOPTIMIZE= pytest -x --disable-warnings co3/tests/general/test_qrdqn.py --log-cli-level=ERROR --log-cli-format="%(asctime)-15s %(message)s" --log-date-format="%Y-%m-%d %H:%M:%S"'
+
+unalias sac_pytest 2>/dev/null || true;
+sac_pytest() {
+    time PYTHONOPTIMIZE= pytest -x --disable-warnings co3/tests/general/test_sac.py --log-cli-level=ERROR --log-cli-format="%(asctime)-15s %(message)s" --log-date-format="%Y-%m-%d %H:%M:%S"
+}
+
+unalias ppo_pytest 2>/dev/null || true;
+ppo_pytest() {
+    time PYTHONOPTIMIZE= pytest -x --disable-warnings co3/tests/general/test_ppo.py --log-cli-level=ERROR --log-cli-format="%(asctime)-15s %(message)s" --log-date-format="%Y-%m-%d %H:%M:%S"
+}
+
+unalias td3_pytest 2>/dev/null || true;
+td3_pytest () {
+    time PYTHONOPTIMIZE= pytest -x --disable-warnings co3/tests/general/test_td3_with_pendulum.py --log-cli-level=ERROR --log-cli-format="%(asctime)-15s %(message)s" --log-date-format="%Y-%m-%d %H:%M:%S"
+}
+
+ddpg_pytest_copter () {
+    time PYTHONOPTIMIZE= pytest -x --disable-warnings co3/tests/general/test_ddpg_with_copter.py --log-cli-level=ERROR --log-cli-format="%(asctime)-15s %(message)s" --log-date-format="%Y-%m-%d %H:%M:%S"
+}
+
+sac_pytest_copter () {
+    time PYTHONOPTIMIZE= pytest -x --disable-warnings co3/tests/general/test_sac_with_copter.py --log-cli-level=ERROR --log-cli-format="%(asctime)-15s %(message)s" --log-date-format="%Y-%m-%d %H:%M:%S"
+}
+
+td3_pytest_copter () {
+    time PYTHONOPTIMIZE= pytest -x --disable-warnings co3/tests/general/test_td3_with_copter.py --log-cli-level=ERROR --log-cli-format="%(asctime)-15s %(message)s" --log-date-format="%Y-%m-%d %H:%M:%S"
+}
+
+unalias gym_pytests 2>/dev/null || true;
+gym_pytests() {
+    ddpg_pytest; sac_pytest; td3_pytest; 
+}
+
+alias gdrl='cd ~/gdrl; docker run -it --rm -p 8888:8888 -v "$PWD"/notebooks/:/mnt/notebooks/ mimoralea/gdrl:v0.14'
+
+alias zip-ingest='zip -R ingest-monitoring logs/2021-05-18/*.png'
+
+alias redis-cli="docker exec -it optuna-redis sh -c 'redis-cli'"
+
+unalias pytests 2>/dev/null || true;
+pytests () {
+    va; PYTHONOPTIMIZE= pytest --disable-warnings co3/tests/general --log-cli-level=ERROR --log-cli-format="%(asctime)-15s %(message)s" --log-date-format="%Y-%m-%d %H:%M:%S";
+    va; PYTHONOPTIMIZE= pytest -x --disable-warnings co3/tests/orderbook-vectors --log-cli-level=ERROR --log-cli-format="%(asctime)-15s %(message)s" --log-date-format="%Y-%m-%d %H:%M:%S";
+}
+
+update-all-python-packages () {
+    pip3 list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip3 install -U
+}
+
+export HYDRA_FULL_ERROR=1
+
+# https://docs.nvidia.com/cuda/cublas/index.html#cublasApi_reproducibility
+export CUBLAS_WORKSPACE_CONFIG=:16:8
+
+export PYTHONBREAKPOINT=0
+
+export CO3_CONFIG_PATH=$CO3_PATH/co3-configurations/dev:$CO3_PATH/co3-configurations/test:$CO3_PATH/co3-configurations/dev/dl:$CO3_PATH/co3-configurations/test/gabe/run_configs
+export CO3_HPO_CONFIG_PATH=$CO3_PATH/co3/hpo/yaml
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+echo -n "version: ";node -pe "require('./package.json').version"
+
+GIT=.git
+if [ -d "$GIT" ]; then
+    echo -n "branch: ";git branch --show-current
+fi
+
+upgrade-packages () {
+    pip install git+ssh://git@github.com/1057405bcltd/sentient-gym.git -U
+    pip install git+ssh://git@github.com/1057405bcltd/sentient-util.git -U
+    pip install git+ssh://git@github.com/1057405bcltd/sentient-traders.git -U
+    pip install git+https://github.com/simondlevy/gym-copter.git -U
+}
+
+# ssh test scripts
+test_ddpg_ds1 () {
+    ssh ds1  -t 'bash -l -c "cd co3; git pull; source project; ddpg;"'
+}
+
+test_ddpg_ds2 () {
+    ssh ds2  -t 'bash -l -c "cd co3; git pull; source project; ddpg;"'
+}
+source bin/activate
+

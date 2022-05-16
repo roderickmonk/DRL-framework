@@ -1,0 +1,11 @@
+play03 \
+algorithm=q \
+episodes=100000000 \
+buffer_size=320 \
+batch_size=320 \
+training_interval=320 \
+child_process.csv_path=QR/200_2A_320Batch \
+generate_csv=false \
+network=QR2002A320Batch \
+order_depths=order_depths_1 \
+qrdqn.quantile_resolution=200

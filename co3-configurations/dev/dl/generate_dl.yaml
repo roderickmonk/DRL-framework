@@ -1,0 +1,106 @@
+generators:
+ 
+  training_dataset1:
+    env:                            sentient_gym:OrderbookHistoryEnv-v0
+    destination:                    datasets/dl/training_dataset1.json
+    log_interval:                   200
+    ql:                             0.2
+    is_buy:                         False
+    precision:                      8
+    env_config:
+      envId:                        0
+      exchange:                     bittrex
+      market:                       btc-eth
+      start_range:                  2019-07-01T00:00:00
+      end_range:                    2019-07-16T00:00:00
+      n:                            5
+      k:                            1.5
+      side:                         sell # [ buy | sell | ob ]
+
+      pdf:
+        name:                           pdf-test-6
+        market:                         btc-eth
+        age_limit:                      90
+        start_window:                   90 # days
+        start_range:                    2019-01-17T00:30:00
+        end_range:                      2019-07-17T03:00:00
+
+  training_dataset2:
+    env:                            sentient_gym:OrderbookHistoryEnv-v0
+    destination:                    datasets/dl/training_dataset2.json
+    log_interval:                   200
+    ql:                             0.2
+    is_buy:                         False
+    precision:                      8
+    env_config:
+      envId:                        0
+      exchange:                     bittrex
+      market:                       btc-eth
+      start_range:                  2019-06-16T00:00:00
+      end_range:                    2019-07-01T00:00:00
+      n:                            5
+      k:                            1.5
+      side:                         sell # [ buy | sell | ob ]
+
+      pdf:
+        name:                           pdf-test-6
+        market:                         btc-eth
+        age_limit:                      90
+        start_window:                   90 # days
+        start_range:                    2019-01-17T00:30:00
+        end_range:                      2019-07-17T03:00:00
+
+  training_dataset3:
+    env:                            sentient_gym:OrderbookHistoryEnv-v0
+    destination:                    datasets/dl/training_dataset3.json
+    log_interval:                   200
+    ql:                             0.2
+    is_buy:                         False
+    precision:                      8
+    env_config:
+      envId:                        0
+      exchange:                     bittrex
+      market:                       btc-eth
+      start_range:                  2019-06-01T00:00:00
+      end_range:                    2019-06-16T00:00:00
+      n:                            20
+      k:                            1.5
+      side:                         sell # [ buy | sell | ob ]
+
+      pdf:
+        name:                           pdf-test-6
+        market:                         btc-eth
+        age_limit:                      90
+        start_window:                   90 # days
+        start_range:                    2019-01-17T00:30:00
+        end_range:                      2019-07-17T03:00:00
+
+  test_dataset1:
+    env:                            sentient_gym:OrderbookHistoryEnv-v0
+    destination:                    datasets/dl/test_dataset1.json
+    log_interval:                   200
+    ql:                             0.2
+    is_buy:                         False
+    precision:                      8
+    env_config:
+      envId:                        0
+      exchange:                     bittrex
+      market:                       btc-eth
+      start_range:                  2019-07-16T00:00:00
+      end_range:                    2019-07-16T04:00:00
+      n:                            5
+      k:                            1.5
+      side:                         sell # [ buy | sell | ob ]
+
+      pdf:
+        name:                           pdf-test-6
+        market:                         btc-eth
+        age_limit:                      90
+        start_window:                   90 # days
+        start_range:                    2018-01-15T12:30:00
+        end_range:                      2019-07-15T13:00:00
+
+generator:                          training_dataset1
+
+
+

@@ -1,0 +1,90 @@
+console: logging # logging | progress_bar
+
+playbacks:
+ 
+  cnn_sim:
+    agent:
+      config_class:                     DDPG_SimEnv1_Config
+      episodes:                         100000
+      gamma:                            0.99 # Bellman discount factor
+      batch_size:                       200
+      buffer_size:                      400
+      network:                          networks/ddpg-test
+      torch_models:
+        Actor:
+          hidden_dims:                  [400, 300]
+          activations:                  [nn.ReLU]
+          conv_filters:                 [128, 64]
+          kernel_size:                  2        
+        Critic:
+          hidden_dims:                  [400, 300]
+          activations:                  [nn.ReLU]
+      exploration:                      100
+      actor_lr:                         0.0001
+      critic_lr:                        0.001
+      tau:                              0.001
+      policy_noise:                     0.02
+      noise_clip:                       0.5
+      training_interval:                2
+      save_onnx:                        False
+
+        
+    env_config:
+      action_space_low:               [-9,-9]
+      action_space_high:              [-5,-5]
+      env_name:                       sentient_gym:Simulate-v1
+      QL:                             1
+      IL:                             2
+      actualFeeRate:                  0.0025
+      minNotional:                    0.00000001
+      query:
+        envId:                        0
+        exchange:                     bittrex
+        market:                       btc-eth
+        start_range:                  2021-05-01T00:00:00
+        end_range:                    2021-07-01T00:00:00
+      funds:                          10000
+      inventory:                      0
+      episode_type:                   fixed_length # variable_length
+      episode_length:                 100
+      orderbook_entries:              60
+      tuning:                         pdf-test-6
+      grid:
+        start: -4
+        stop: 2
+        resolution: 0.1
+      trades_collection:              BittrexV3Trades
+      orderbooks_with_trades_collection: V3-recovered-orderbooks-with-trades-btc-eth
+      load_database:                  mongo
+      front_load:                     False
+      episodes:                       70
+      reward_epoch:                   stepwise
+      pool_size:                      32
+
+  
+    misc:
+      csv_path:                       rewards/test
+      generate_csv:                   False
+      leave_progress_bar:             True
+      log_interval:                   1
+      log_level:                      INFO
+      seed:                           7
+      record_state:                   False
+      csv_class:                      SimulationRewardsCsv
+
+    child_process:
+      misc:
+        csv_path:                       rewards/test
+        generate_csv:                   False
+        log_interval:                   1
+
+      agent:
+        episodes:                       10
+
+      launch_delay:                     0
+      launch_interval:                  70
+
+
+
+
+

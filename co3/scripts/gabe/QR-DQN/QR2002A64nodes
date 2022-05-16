@@ -1,0 +1,9 @@
+play03 \
+algorithm=q \
+episodes=100000000 \
+generate_csv=false \
+child_process.csv_path=QR/200_2A_64nodes \
+network=QR2002A64nodes \
+order_depths=order_depths_1 \
+qrdqn.quantile_resolution=200 \
+network_nodes=64

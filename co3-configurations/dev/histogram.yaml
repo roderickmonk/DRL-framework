@@ -1,0 +1,8 @@
+
+source_collection:              V3-recovered-orderbooks-metadata
+
+query:
+  envId:                        0
+  exchange:                     bittrex
+  markets:                      [btc-ada]
+

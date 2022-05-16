@@ -1,0 +1,82 @@
+#!/usr/bin/env python
+import re
+import os
+import logging
+
+
+CO3_PARAMS = [
+    "algorithm=q +device=c episodes=2001 order_depths=order_depths_1 qrdqn.quantile_resolution=2 purge_network=true",
+    "algorithm=q +device=c episodes=2001 order_depths=order_depths_1 qrdqn.quantile_resolution=5 purge_network=true",
+    "algorithm=q +device=c episodes=2001 order_depths=order_depths_1 qrdqn.quantile_resolution=10 purge_network=true",
+    "algorithm=q +device=c episodes=2001 order_depths=order_depths_1 qrdqn.quantile_resolution=100 purge_network=true",
+    "algorithm=q +device=g episodes=2001 order_depths=order_depths_1 qrdqn.quantile_resolution=2 purge_network=true",
+    "algorithm=q +device=g episodes=2001 order_depths=order_depths_1 qrdqn.quantile_resolution=5 purge_network=true",
+    "algorithm=q +device=g episodes=2001 order_depths=order_depths_1 qrdqn.quantile_resolution=10 purge_network=true",
+    "algorithm=q +device=g episodes=2001 order_depths=order_depths_1 qrdqn.quantile_resolution=100 purge_network=true",
+]
+
+
+profile_lookup = [
+    ["TradeHistory.getInstance(config=config", "TH Load"],
+    ["DrlPlay(config=config).run()", "Play Run"],
+    ["agent = self.agent(config=self.config)", "Agent Init"],
+    ["agent.run()", "Agent Run"],
+    ["loss.backward()", "%backward"],
+    ["loss = huber(diff)", "%huber"],
+    ["train()", "%train"],
+    ["self.memory.sample(batch_size)", "%sample"],
+]
+
+
+def find_profile(line, pair):
+    find_index = line.index(pair[0])
+    if len(line[0:find_index].replace(" ", "")) > 16 and "def" not in line:
+
+        words = line.split()
+        line_no, hits, total, per_hit, percent = [
+            float(x) for i, x in enumerate(words) if i < 5
+        ]
+        logging.info(
+            f"{pair[1]:12} Line: {int(line_no):>6}, Hits: {int(hits):>5}, Total: {int(total):>8}, Per Hit: {per_hit:10.1f}, %Time: {percent:4.1f}"
+        )
+
+
+if __name__ == "__main__":
+
+    LOG_FORMAT = "%(asctime)-15s %(message)s"
+    logging.basicConfig(format=LOG_FORMAT, level="INFO")
+
+    WORKFILE = "workfile.txt"
+
+    for co3_params in CO3_PARAMS:
+
+        try:
+
+            logging.info(f"QR-DQN Analysis with {co3_params}")
+
+            if os.system(
+                f"kernprof -l -o play03.lprof co3/co3.py {co3_params} >/dev/null"
+            ):
+                break
+
+            if os.system(f"python -m line_profiler play03.lprof > {WORKFILE}"):
+                break
+
+            with open(WORKFILE) as f:
+                for line in f:
+                    for i, pair in enumerate(profile_lookup):
+                        if pair[0] in line:
+                            find_profile(line, pair)
+
+        except AssertionError as msg:
+            logging.critical(msg)
+
+        finally:
+            # Cleanup
+            for f in os.listdir("."):
+                if re.search(".*\.lprof", f):
+                    os.remove(f)
+
+            if os.path.exists(WORKFILE):
+                os.remove(WORKFILE)
+

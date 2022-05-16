@@ -1,0 +1,10 @@
+main.py \
+episodes=10000000 \
+generate_csv=false \
+network=inputs10Mbatchx10 \
+batch_size=6400 \
+buffer_size=6401 \
+training_interval=6400 \
+datasets=[alt_training_set_snt] \
+time_breaks=time_breaks_2 \
+order_depths=order_depths_1

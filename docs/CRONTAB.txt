@@ -1,0 +1,14 @@
+SHELL=/bin/bash
+
+# For more information see the manual pages of crontab(5) and cron(8)
+# 
+# Example of job definition:
+# .---------------- minute (0 - 59)
+# |  .------------- hour (0 - 23)
+# |  |  .---------- day of month (1 - 31)
+# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+# |  |  |  |  |
+# *  *  *  *  * user-name  command to be executed
+47 * * * * cd co3; mkdir -p logs/cron; source project &>> logs/cron/hourly.log; cron_hourly &>> logs/cron/hourly.log
+53 20 * * * cd co3; mkdir -p logs/cron; source project &>> logs/cron/daily.log; cron_daily &>> logs/cron/daily.log

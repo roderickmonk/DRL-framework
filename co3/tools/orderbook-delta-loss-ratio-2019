@@ -1,0 +1,94 @@
+"""   #!/usr/bin/env python   """
+
+import warnings
+
+warnings.filterwarnings("ignore", category=UserWarning)
+
+import logging
+import os
+from datetime import datetime
+
+from sentient_util import logger
+import pandas as pd
+from dateutil.parser import parse
+from matplotlib import dates as mdates
+from matplotlib import pyplot as plt
+from pymongo import MongoClient
+
+
+def main():
+
+    query_header = {
+        "e": 0,
+        "x": "bittrex",
+        "m": "btc-eth",
+    }
+
+    start = "2019-01-01"
+    end = "2020-01-01"
+
+    primary_mongo = MongoClient(host=os.environ["MONGODB"])
+    orderbook_collection = primary_mongo["history"]["orderbooks"]
+    recovered_collection = primary_mongo["derived-history"]["recovered-orderbooks"]
+
+    dates = pd.date_range(start, end, freq="MS")
+
+    total_recovered_count = 0
+
+    recovered_arr = []
+
+    for i, d in enumerate(dates[:-1]):
+
+        month_start = parse(str(d))
+        next_month = parse(str(dates[i + 1]))
+
+        orderbook_filter = {
+            "$and": [query_header, {"ts": {"$gte": month_start, "$lt": next_month}},]
+        }
+
+        """
+        orderbook_list = list(
+            orderbook_collection.find(orderbook_filter, {"ts": 1, "s": 1})
+        )
+
+        orderbook_count = len(
+            [x for x in orderbook_list if "s" in x and x["s"] is False]
+        )
+        """
+
+        orderbook_count = orderbook_collection.count_documents(orderbook_filter)
+
+        recovery_filter = {
+            "$and": [query_header, {"ts": {"$gte": month_start, "$lt": next_month}}]
+        }
+
+        recovered_count = recovered_collection.count_documents(recovery_filter)
+
+        recovered_arr.append(recovered_count)
+
+        total_recovered_count += recovered_count
+
+        print(
+            f"From {month_start} To {next_month} => "
+            f"Orderbooks: {orderbook_count:7}, "
+            f"Recovered Orderbooks: {recovered_count:7}, "
+            f"Ratio: {(recovered_count / orderbook_count) * 100:6}"
+            # f"Storage Size: {(recovered_count / total_recovered_count) * 788}Gb"
+        )
+
+    for i, d in enumerate(dates[:-1]):
+
+        month_start = parse(str(d))
+        next_month = parse(str(dates[i + 1]))
+
+        print(
+            f"From {month_start} To {next_month} => "
+            f"Storage Size by Month: {(recovered_arr[i] / total_recovered_count) * 788:8.3} Gb"
+        )
+
+
+if __name__ == "__main__":
+
+    logger.setup()
+    main()
+    logging.warning("✨That's✨All✨Folks✨")

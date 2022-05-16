@@ -1,0 +1,10 @@
+main.py \
+episodes=80000000 \
+batch_size=6400 \
+buffer_size=6401 \
+training_interval=6400 \
+child_process_launch_interval=100000 \
+generate_csv=false \
+child_process_config_path=/shared/co3/co3-configurations/test/gabe/child-config/co3-child-100Meps9A2part.yaml \
+network=9A2part \
+order_depths=order_depths_5

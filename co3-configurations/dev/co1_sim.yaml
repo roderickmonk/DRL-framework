@@ -1,0 +1,45 @@
+console: logging # logging | progress_bar
+
+playbacks:
+
+  sample_co1:
+    agent:
+      agent:                          simulator.simulator_agent
+      trader_config:
+        trader:                       traders.co1
+        QL:                           0.1
+        depth:                        10
+        allowOrderConflicts:          true
+        feeRate:                      0.0027
+        precision:                    8
+        pdf:                          pdf1 
+      episodes:                       1
+      training_interval:              2
+        
+    env_config:
+      env_name:                       sentient_gym:Simulate-v0
+      QL:                             0.1
+      IL:                             0.2
+      actualFeeRate:                  0.0025
+      minNotional:                    0.00000001
+      envId:                          0
+      exchange:                       bittrex
+      market:                         btc-zen
+      start_range:                    2019-01-18T00:00:00
+      end_range:                      2019-01-25T00:00:00
+      funds:                          1
+      episode_type:                   fixed_length_episode
+      episode_length:                 50000
+
+
+    misc:
+      csv_path:                       rewards/test
+      generate_csv:                   True
+      leave_progress_bar:             True
+      log_interval:                   10
+      log_level:                      INFO 
+      seed:                           7
+      record_state:                   False
+
+
+

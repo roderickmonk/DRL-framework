@@ -1,0 +1,72 @@
+console: logging # logging | progress_bar
+
+playbacks:
+ 
+  cnn_sim:
+    agent:
+      config_class:                     DDPG_SimEnv1_Config
+      episodes:                         100000
+      gamma:                            0.99 # Bellman discount factor
+      batch_size:                       500
+      buffer_size:                      100000
+      network:                          networks/ddpg-test
+      torch_models:
+        Actor:
+          hidden_dims:                  [400, 300]
+          activations:                  [nn.ReLU]
+          conv_filters:                 [64, 32]
+          kernel_size:                  2        
+        Critic:
+          hidden_dims:                  [400, 300]
+          activations:                  [nn.ReLU]
+      exploration:                      0
+      actor_lr:                         0.0001
+      critic_lr:                        0.001
+      tau:                              0.001
+      policy_noise:                     0.02
+      noise_clip:                       0.5
+      training_interval:                100
+        
+    env_config:
+      action_space_low:               [9.5,9.5]
+      action_space_high:              [10.5,10.5]
+      env_name:                       sentient_gym:Simulate-v1
+      QL:                             1
+      IL:                             2
+      actualFeeRate:                  0.0025
+      minNotional:                    0.00000001
+      query:
+        envId:                        0
+        exchange:                     bittrex
+        market:                       btc-neo
+        start_range:                  2022-02-01T00:00:00
+        end_range:                    2022-04-01T00:00:00
+      funds:                          10000
+      inventory:                      100000
+      episode_type:                   fixed_length # variable_length
+      episode_length:                 1000
+      orderbook_entries:              20
+      tuning:                         pdf-test-6
+      grid:
+        start: -4
+        stop: 2
+        resolution: 0.1
+      trades_collection:              BittrexV3Trades
+      orderbooks_with_trades_collection: V3-recovered-orderbooks-with-trades-btc-neo
+      run_database:                   mongo
+      front_load:                     True
+      pool_size:                      32
+ 
+    misc:
+      csv_path:                       rewards/test
+      generate_csv:                   False
+      leave_progress_bar:             True
+      log_interval:                   200
+      log_level:                      WARNING 
+      seed:                           7
+      record_state:                   False
+      csv_class:                      SimulationRewardsCsv
+
+
+
+

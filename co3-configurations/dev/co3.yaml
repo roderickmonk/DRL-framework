@@ -1,0 +1,492 @@
+console: logging # logging | progress_bar
+
+defaults_:                            ${env:CO3_PATH}/co3-configurations/dev/playback_defaults.yaml
+
+playbacks:
+  sample_actor_critic:
+
+    agent:
+      algorithm:                      ACTOR_CRITIC
+      torch_models:
+        main:
+            hidden_dims:              [128]
+            activations:              [nn.ReLU]
+      actor_lr:                       0.0005
+
+    env_config:
+      env_name:                       sentient_gym:EvaluateDataFrameEnv-v0
+      evaluate:                       True
+      datasets:                       [datasets/test-th-vector-dataset]
+      order_depths:                   order_depths_0
+      market:                         btc-eth
+      start:                          2019-07-15
+      start_range:                    2019-07-10T12:00:00
+      end_range:                      2019-07-15T01:00:00
+      ql:                             0.2   
+
+    child_process:
+      env_config:
+        datasets:                     [datasets/test-th-vector-dataset]
+
+  sample_dqn:
+    agent:
+      agent:                          dqn.dqn_agent
+      torch_models:
+        main:
+          hidden_dims:                [64, 64]
+          activations:                [nn.ReLU]
+      epsilon_decay:
+        type:                         EXPONENTIAL # LINEAR or EXPONENTIAL
+        rate:                         0.998 # Explore decay rate
+        end:                          0.01 # Final (steady-state) explore probability
+        start:                        1.0 # Initial explore probability
+      actor_lr:                       0.0005
+      tau:                            0.001 
+
+    env_config:
+      env_name:                         sentient_gym:EvaluateDataFrameEnv-v0
+      evaluate:                         True
+      datasets:                         [datasets/test/th-vector.json]
+      order_depths:                     order_depths_0
+      market:                           btc-eth
+      start:                            2019-07-15
+      start_range:                      2019-07-10T12:00:00
+      end_range:                        2019-07-15T01:00:00
+      ql:                               0.2
+
+    child_process:
+      env_config:
+        datasets:                       [datasets/test/th-vector.json]
+
+  sample_ddpg:
+
+    agent:
+      config_class:                     DdpgProcessConfig
+      episodes:                         200
+      batch_size:                       4
+      buffer_size:                      4
+      network:                          networks/ddpg-test
+      torch_models:
+        Actor:
+          hidden_dims:                  [400, 300]
+          activations:                  [nn.ReLU]
+        Critic:
+          hidden_dims:                  [400, 300]
+          activations:                  [nn.ReLU]
+      exploration:                      100
+      actor_lr:                         0.0001
+      critic_lr:                        0.001
+      tau:                              0.001
+
+    env_config:
+      env_name:                         sentient_gym:SellOrderbookDataFrameEnv-v0
+      is_buy:                           False
+      ql:                               0.2
+      datasets:                         [/datasets/test/ob_sell_test_set_snt.json]
+      precision:                        8
+      episode_type:                     default_episode
+      episode_length:                   1
+      get_reward:                       get_reward_profit
+      pdf:
+        name:                           pdf-test-6
+        envId:                          0
+        exchange:                       bittrex
+        market:                         btc-eth
+        start_window:                   90 # days
+        start_range:                    2018-01-15T12:30:00
+        end_range:                      2019-07-15T13:00:00
+
+    child_process:
+      agent:
+        episodes:                       40
+
+      misc:
+        generate_csv:                   True
+
+      env_config:
+        randomize_dataset_reads:        False
+        datasets:                       [/datasets/test/ob_sell_test_set_snt.json]
+
+    misc:
+      generate_csv:                     True
+      market:                           btc-eth
+
+
+  sample_gac:
+    agent:
+      algorithm:                        GAC
+      actor_lr:                         1e-4
+      critic_lr:                        1e-3
+      value_lr:                         1e-3
+      layer1_size:                      400
+      layer2_size:                      300
+      torch_models:
+        Critic:
+          hidden_dims:                  [400, 300]
+          activations:                  [nn.ReLU]
+      tau:                              0.01
+      action_noise:
+        type:                           Gaussian
+        sigma:                          0.2
+
+      exploration:                      100
+
+      training_actor_samples:           32
+      # number of times to sample from the actor for calculating the losses
+
+      not_autoregressive:               False
+      q_normalization:                  0.01
+      # Uniformly smooth the Q function in this range.
+
+      target_policy:                    exponential
+      # choices=["linear", "boltzman", "uniform", "exponential"],
+      # Target policy is constructed based on this operator.",
+
+      target_policy_q:                  min
+      # choices=["min", "max", "mean", "none"],
+      # The Q value for each sample is determined based on this operator over
+      # the two Q networks.
+
+      boltzman_temperature:             1.0
+      # Boltzman Temperature for normalizing actions
+
+    env_config:
+      env_name:                         sentient_gym:SellOrderbookDataFrameEnv-v0
+      is_buy:                           False
+      ql:                               0.2
+      datasets:                         [datasets/test/selltest]
+      precision:                        8
+      pdf:
+        name:                           pdf-test-6
+        envId:                          0
+        exchange:                       bittrex
+        market:                         btc-eth
+        start_window:                   90 # days
+        start_range:                    2018-01-15T12:30:00
+        end_range:                      2019-07-15T13:00:00
+
+    child_process:
+      env_config:
+        datasets:                       [datasets/test/selltest.json]
+
+  sample_qrdqn:
+    agent:
+      agent:                            dqn.qrdqn_agent
+      torch_models:
+        main:
+          hidden_dims:                  [256,128,64]
+          activations:                  [nn.Tanh]
+      epsilon_decay:
+        rate:                           0.998 # Explore decay rate
+        type:                           EXPONENTIAL # LINEAR | EXPONENTIAL
+        end:                            0.01 # Final (steady-state) explore probability
+        start:                          1.0 # Initial explore probability
+      actor_lr:                         0.0005
+      quantile_resolution:              2
+
+    env_config:
+      env_name:                         sentient_gym:EvaluateDataFrameEnv-v0
+      evaluate:                         True
+      datasets:                         [datasets/test/th-vector.json]
+      order_depths:                     order_depths_0
+      market:                           btc-snt
+      start:                            2019-07-15
+      start_range:                      2019-01-10T12:00:00
+      end_range:                        2019-07-15T01:00:00
+      ql:                               0.2
+
+    child_process:
+      env_config:
+        datasets:                       [datasets/test/th-vector.json]
+      nn_trace:
+        active:                         True
+        target_directory:               null
+        count:                          3
+        pattern:                        [4, 2]
+
+  sample_sac:
+    agent:
+      config_class:                     SacProcessConfig
+      episodes:                         100
+      torch_models:
+        Critic:
+          hidden_dims:                  [256, 256]
+          activations:                  [nn.ReLU]
+        Actor:
+          hidden_dims:                  [256, 256]
+          activations:                  [nn.ReLU]
+      tau:                              0.005
+      actor_lr:                         0.0003
+      critic_lr:                        0.0003
+      alpha:                            0.2
+      automatic_entropy_tuning:         True
+      exploration:                      100
+
+    env_config:
+      env_name:                         sentient_gym:SellOrderbookDataFrameEnv-v0
+      is_buy:                           False
+      ql:                               0.2
+      datasets:                         [/datasets/test/ob_sell_test_set_snt.json]
+      precision:                        8
+      episode_type:                     default_episode
+      pdf:
+        name:                           sac-test2
+        envId:                          0
+        exchange:                       bittrex
+        market:                         btc-eth
+        start_window:                   90 # days
+        start_range:                    2018-01-15T12:30:00
+        end_range:                      2019-07-15T13:00:00
+
+    child_process:
+      env_config:
+        datasets:                       [/datasets/test/ob_sell_test_set_snt.json]
+
+    misc:
+      generate_csv:                     False
+      market:                           btc-eth
+
+
+  sample_td3:
+
+    agent:
+      config_class:                     Td3ProcessConfig
+      episodes:                         100
+      batch_size:                       4
+      buffer_size:                      4
+      torch_models:
+        Actor:
+          hidden_dims:                  [256, 128]
+          activations:                  [nn.ReLU]
+        Critic:
+          hidden_dims:                  [256, 128]
+          activations:                  [nn.ReLU]
+      actor_lr:                         3e-4
+      critic_lr:                        3e-4
+      tau:                              0.001
+      policy_noise:                     0.02
+      noise_clip:                       0.5
+      exploration:                      100
+
+    env_config:
+      env_name:                         sentient_gym:SellOrderbookDataFrameEnv-v0
+      is_buy:                           False
+      ql:                               0.2
+      datasets:                         [/datasets/test/ob_sell_test_set_snt.json]
+      precision:                        8
+      episode_type:                     default_episode
+      pdf:
+        name:                           pdf-test-9
+        envId:                          0
+        exchange:                       bittrex
+        market:                         btc-eth
+        start_window:                   360 # days
+        start_range:                    2018-01-15T12:30:00
+        end_range:                      2019-07-15T13:00:00
+
+    child_process:
+      env_config:
+        datasets:                       [/datasets/test/ob_sell_test_set_snt.json]
+
+      agent:
+        episodes:                       100
+
+    misc:
+      generate_csv:                     False
+      market:                           btc-eth
+
+
+  sample_ppo:
+    agent:
+      config_class:                     PpoProcessConfig
+      episodes:                         1000
+      actor_lr:                         0.0003
+      critic_lr:                        0.001
+      gamma:                            0.99
+      K_epochs:                         80
+      eps_clip:                         0.2       
+      network:                          null
+      action_std_init:                  0.6
+      action_std_decay_freq:            2.5e5
+      action_std_decay_rate:            0.05
+      min_action_std:                   0.1
+
+    env_config:
+      env_name:                         sentient_gym:SellOrderbookDataFrameEnv-v0
+      is_buy:                           False
+      ql:                               0.2
+      datasets:                         [datasets/test/ob_sell_test_set_snt.json]
+      precision:                        8
+      pdf:
+        name:                           pdf-test-6
+        envId:                          0
+        exchange:                       bittrex
+        market:                         btc-eth
+        start_window:                   90 # days
+        start_range:                    2018-01-15T12:30:00
+        end_range:                      2019-07-15T13:00:00
+
+    child_process:
+      misc:
+        generate_csv:                   False
+
+      env_config:
+        randomize_dataset_reads:        False
+        datasets:                       [datasets/test/ob_sell_test_set_snt.json]
+        get_reward:                     get_reward_profit
+
+    misc:
+      generate_csv:                     False
+      market:                           btc-eth
+
+  ddpg_sim:
+    agent:
+      config_class:                     DDPG_SimEnv1_Config
+      episodes:                         1000
+      batch_size:                       200
+      buffer_size:                      200
+      network:                          networks/ddpg-test
+      torch_models:
+        Actor:
+          hidden_dims:                  [400, 300]
+          activations:                  [nn.ReLU]
+        Critic:
+          hidden_dims:                  [400, 300]
+          activations:                  [nn.ReLU]
+      exploration:                      0
+      actor_lr:                         0.0001
+      critic_lr:                        0.001
+      tau:                              0.001
+        
+    env_config:
+      action_space_low:               -0.3
+      action_space_high:              0.3
+      env_name:                       sentient_gym:Simulate-v1
+      QL:                             1
+      IL:                             100000
+      actualFeeRate:                  0.0025
+      minNotional:                    0.00000001
+      query:
+        envId:                          0
+        exchange:                       bittrex
+        market:                         btc-ada
+        # start_range:                    2019-01-01T00:00:00
+        start_range:                    2021-11-01T00:00:00
+        # end_range:                      2019-03-01T00:00:00
+        end_range:                      2021-12-01T00:00:00
+      funds:                          10000
+      inventory:                      0
+      episode_type:                   variable_length
+      episode_length:                 50000
+      orderbook_entries:              10
+      grid:
+        start: -4
+        stop: 2
+        resolution: 0.1
+
+    misc:
+      csv_path:                       rewards/test
+      generate_csv:                   True
+      leave_progress_bar:             True
+      log_interval:                   10
+      log_level:                      INFO 
+      seed:                           7
+      record_state:                   False
+      csv_class:                      SimulationRewardsCsv
+
+  td3_sim:
+    agent:
+      config_class:                     Td3ProcessConfig
+      episodes:                         200
+      batch_size:                       4
+      buffer_size:                      4
+      network:                          networks/ddpg-test
+      torch_models:
+        Actor:
+          hidden_dims:                  [400, 300]
+          activations:                  [nn.ReLU]
+        Critic:
+          hidden_dims:                  [400, 300]
+          activations:                  [nn.ReLU]
+      exploration:                      0
+      actor_lr:                         0.0001
+      critic_lr:                        0.001
+      tau:                              0.001
+      policy_noise:                     0.02
+      noise_clip:                       0.5
+        
+    env_config:
+      env_name:                       sentient_gym:Simulate-v0
+      QL:                             0.1
+      IL:                             0.2
+      actualFeeRate:                  0.0025
+      minNotional:                    0.00000001
+      envId:                          0
+      exchange:                       bittrex
+      market:                         btc-zen
+      start_range:                    2019-01-18T00:00:00
+      end_range:                      2019-01-25T00:00:00
+      funds:                          1
+      episode_type:                   fixed_length_episode
+      episode_length:                 50000
+
+    misc:
+      csv_path:                       rewards/test
+      generate_csv:                   True
+      leave_progress_bar:             True
+      log_interval:                   10
+      log_level:                      INFO 
+      seed:                           7
+      record_state:                   False
+      csv_class:                      SimulationRewardsCsv
+
+  sac_sim:
+    agent:
+      config_class:                     SacProcessConfig
+      episodes:                         200
+      batch_size:                       4
+      buffer_size:                      4
+      network:                          networks/ddpg-test
+      torch_models:
+        Actor:
+          hidden_dims:                  [400, 300]
+          activations:                  [nn.ReLU]
+        Critic:
+          hidden_dims:                  [400, 300]
+          activations:                  [nn.ReLU]
+      exploration:                      0
+      actor_lr:                         0.0001
+      critic_lr:                        0.001
+      tau:                              0.001
+      policy_noise:                     0.02
+      noise_clip:                       0.5
+        
+    env_config:
+      env_name:                       sentient_gym:Simulate-v0
+      QL:                             0.1
+      IL:                             0.2
+      actualFeeRate:                  0.0025
+      minNotional:                    0.00000001
+      envId:                          0
+      exchange:                       bittrex
+      market:                         btc-zen
+      start_range:                    2019-01-18T00:00:00
+      end_range:                      2019-01-25T00:00:00
+      funds:                          1
+      episode_type:                   fixed_length_episode
+      episode_length:                 50000
+
+    misc:
+      csv_path:                       rewards/test
+      generate_csv:                   True
+      leave_progress_bar:             True
+      log_interval:                   10
+      log_level:                      INFO 
+      seed:                           7
+      record_state:                   False
+      csv_class:                      SimulationRewardsCsv
+
+playback:                             ddpg_sim
+
+
+

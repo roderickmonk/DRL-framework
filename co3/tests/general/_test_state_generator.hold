@@ -1,0 +1,1490 @@
+import logging
+
+import numpy as np
+import pandas as pd
+import pytest
+
+# from env_hold.balance_trade_history_env import BalanceTradeHistoryEnv
+from env_modules.evaluate_trade_history_env import EvaluateTradeHistoryEnv_v0
+
+logging.basicConfig(
+    format="[%(levelname)-5s] %(message)s", level=logging.INFO, datefmt=""
+)
+
+np.set_printoptions(precision=14, floatmode="fixed", edgeitems=25)
+
+
+VPS_LENGTH = 21
+index = np.arange(VPS_LENGTH) + 15000
+data = np.arange(VPS_LENGTH) + 10
+
+vps = pd.Series(data, index, dtype="float32")
+bid = pd.Series(data, index, dtype="float32")
+ask = pd.Series(data, index, dtype="float32")
+
+
+time_breaks = np.concatenate((np.arange(0, 10), np.arange(10, 61, 5),))
+EvaluateTradeHistoryEnv_v0.state_slots = np.array(0)
+EvaluateTradeHistoryEnv_v0._slots_and_intervals(time_breaks)
+
+
+def test_bid_0():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15000, side=vps)
+
+    expected_state = np.array(
+        [
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_1():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15001, side=vps)
+
+    expected_state = np.array(
+        [
+            10.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_2():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15002, side=vps)
+
+    expected_state = np.array(
+        [
+            11.00000000000000,
+            10.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_3():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15003, side=vps)
+
+    expected_state = np.array(
+        [
+            12.00000000000000,
+            11.00000000000000,
+            10.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_4():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15004, side=vps)
+
+    expected_state = np.array(
+        [
+            13.00000000000000,
+            12.00000000000000,
+            11.00000000000000,
+            10.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_5():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15005, side=vps)
+
+    expected_state = np.array(
+        [
+            14.00000000000000,
+            13.00000000000000,
+            12.00000000000000,
+            11.00000000000000,
+            10.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_6():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15006, side=vps)
+
+    expected_state = np.array(
+        [
+            15.00000000000000,
+            14.00000000000000,
+            13.00000000000000,
+            12.00000000000000,
+            11.00000000000000,
+            10.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_7():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15007, side=vps)
+
+    expected_state = np.array(
+        [
+            16.00000000000000,
+            15.00000000000000,
+            14.00000000000000,
+            13.00000000000000,
+            12.00000000000000,
+            11.00000000000000,
+            10.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_8():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15008, side=vps)
+
+    expected_state = np.array(
+        [
+            17.00000000000000,
+            16.00000000000000,
+            15.00000000000000,
+            14.00000000000000,
+            13.00000000000000,
+            12.00000000000000,
+            11.00000000000000,
+            10.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_9():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15009, side=vps)
+
+    expected_state = np.array(
+        [
+            18.00000000000000,
+            17.00000000000000,
+            16.00000000000000,
+            15.00000000000000,
+            14.00000000000000,
+            13.00000000000000,
+            12.00000000000000,
+            11.00000000000000,
+            10.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_10():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15010, side=vps)
+
+    expected_state = np.array(
+        [
+            19.00000000000000,
+            18.00000000000000,
+            17.00000000000000,
+            16.00000000000000,
+            15.00000000000000,
+            14.00000000000000,
+            13.00000000000000,
+            12.00000000000000,
+            11.00000000000000,
+            10.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_11():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15011, side=vps)
+
+    expected_state = np.array(
+        [
+            20.00000000000000,
+            19.00000000000000,
+            18.00000000000000,
+            17.00000000000000,
+            16.00000000000000,
+            15.00000000000000,
+            14.00000000000000,
+            13.00000000000000,
+            12.00000000000000,
+            11.00000000000000,
+            10.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_12():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15012, side=vps)
+
+    expected_state = np.array(
+        [
+            21.00000000000000,
+            20.00000000000000,
+            19.00000000000000,
+            18.00000000000000,
+            17.00000000000000,
+            16.00000000000000,
+            15.00000000000000,
+            14.00000000000000,
+            13.00000000000000,
+            12.00000000000000,
+            21.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_13():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15013, side=vps)
+
+    expected_state = np.array(
+        [
+            22.00000000000000,
+            21.00000000000000,
+            20.00000000000000,
+            19.00000000000000,
+            18.00000000000000,
+            17.00000000000000,
+            16.00000000000000,
+            15.00000000000000,
+            14.00000000000000,
+            13.00000000000000,
+            33.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_14():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15014, side=vps)
+
+    expected_state = np.array(
+        [
+            23.00000000000000,
+            22.00000000000000,
+            21.00000000000000,
+            20.00000000000000,
+            19.00000000000000,
+            18.00000000000000,
+            17.00000000000000,
+            16.00000000000000,
+            15.00000000000000,
+            14.00000000000000,
+            46.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_15():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15015, side=vps)
+
+    expected_state = np.array(
+        [
+            24.00000000000000,
+            23.00000000000000,
+            22.00000000000000,
+            21.00000000000000,
+            20.00000000000000,
+            19.00000000000000,
+            18.00000000000000,
+            17.00000000000000,
+            16.00000000000000,
+            15.00000000000000,
+            60.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_16():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15016, side=vps)
+
+    expected_state = np.array(
+        [
+            25.00000000000000,
+            24.00000000000000,
+            23.00000000000000,
+            22.00000000000000,
+            21.00000000000000,
+            20.00000000000000,
+            19.00000000000000,
+            18.00000000000000,
+            17.00000000000000,
+            16.00000000000000,
+            65.00000000000000,
+            10.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_17():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15017, side=vps)
+
+    expected_state = np.array(
+        [
+            26.0,
+            25.0,
+            24.0,
+            23.0,
+            22.0,
+            21.0,
+            20.0,
+            19.0,
+            18.0,
+            17.0,
+            70.0,
+            21.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_18():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15018, side=vps)
+
+    expected_state = np.array(
+        [
+            27.0,
+            26.0,
+            25.0,
+            24.0,
+            23.0,
+            22.0,
+            21.0,
+            20.0,
+            19.0,
+            18.0,
+            75.0,
+            33.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_19():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15019, side=vps)
+
+    expected_state = np.array(
+        [
+            28.0,
+            27.0,
+            26.0,
+            25.0,
+            24.0,
+            23.0,
+            22.0,
+            21.0,
+            20.0,
+            19.0,
+            80.0,
+            46.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_20():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15020, side=vps)
+
+    expected_state = np.array(
+        [
+            29.0,
+            28.0,
+            27.0,
+            26.0,
+            25.0,
+            24.0,
+            23.0,
+            22.0,
+            21.0,
+            20.0,
+            85.0,
+            60.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_21():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15021, side=vps)
+
+    expected_state = np.array(
+        [
+            30.0,
+            29.0,
+            28.0,
+            27.0,
+            26.0,
+            25.0,
+            24.0,
+            23.0,
+            22.0,
+            21.0,
+            90.0,
+            65.0,
+            10.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_22():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15022, side=vps)
+
+    expected_state = np.array(
+        [
+            0.0,
+            30.0,
+            29.0,
+            28.0,
+            27.0,
+            26.0,
+            25.0,
+            24.0,
+            23.0,
+            22.0,
+            95.0,
+            70.0,
+            21.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_23():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15023, side=vps)
+
+    expected_state = np.array(
+        [
+            0.0,
+            0.0,
+            30.0,
+            29.0,
+            28.0,
+            27.0,
+            26.0,
+            25.0,
+            24.0,
+            23.0,
+            100.0,
+            75.0,
+            33.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_24():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15024, side=vps)
+
+    expected_state = np.array(
+        [
+            0.0,
+            0.0,
+            0.0,
+            30.0,
+            29.0,
+            28.0,
+            27.0,
+            26.0,
+            25.0,
+            24.0,
+            105.0,
+            80.0,
+            46.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_25():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15025, side=vps)
+
+    expected_state = np.array(
+        [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            30.0,
+            29.0,
+            28.0,
+            27.0,
+            26.0,
+            25.0,
+            110.0,
+            85.0,
+            60.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_26():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15026, side=vps)
+
+    expected_state = np.array(
+        [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            30.0,
+            29.0,
+            28.0,
+            27.0,
+            26.0,
+            115.0,
+            90.0,
+            65.0,
+            10.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_27():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15027, side=vps)
+
+    expected_state = np.array(
+        [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            30.0,
+            29.0,
+            28.0,
+            27.0,
+            120.0,
+            95.0,
+            70.0,
+            21.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_28():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15028, side=vps)
+
+    expected_state = np.array(
+        [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            30.0,
+            29.0,
+            28.0,
+            125.0,
+            100.0,
+            75.0,
+            33.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_29():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15029, side=vps)
+
+    expected_state = np.array(
+        [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            30.0,
+            29.0,
+            130.0,
+            105.0,
+            80.0,
+            46.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_30():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15030, side=vps)
+
+    expected_state = np.array(
+        [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            30.0,
+            135.0,
+            110.0,
+            85.0,
+            60.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_31():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15031, side=vps)
+
+    expected_state = np.array(
+        [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            140.0,
+            115.0,
+            90.0,
+            65.0,
+            10.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_36():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15036, side=vps)
+
+    expected_state = np.array(
+        [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            140.0,
+            115.0,
+            90.0,
+            65.0,
+            10.0,
+            0.0,
+            0.0,
+            0.0,
+            0,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_40():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15040, side=vps)
+
+    expected_state = np.array(
+        [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            30.0,
+            135.0,
+            110.0,
+            85.0,
+            60.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_45():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15045, side=vps)
+
+    expected_state = np.array(
+        [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            30.0,
+            135.0,
+            110.0,
+            85.0,
+            60.0,
+            0.0,
+            0.0,
+            0.0,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_50():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15050, side=vps)
+
+    expected_state = np.array(
+        [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            30.0,
+            135.0,
+            110.0,
+            85.0,
+            60.0,
+            0.0,
+            0.0,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_55():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15055, side=vps)
+
+    expected_state = np.array(
+        [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            30.0,
+            135.0,
+            110.0,
+            85.0,
+            60.0,
+            0.0,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_60():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15060, side=vps)
+
+    expected_state = np.array(
+        [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            30.0,
+            135.0,
+            110.0,
+            85.0,
+            60.0,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_65():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15065, side=vps)
+
+    expected_state = np.array(
+        [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            30.0,
+            135.0,
+            110.0,
+            85.0,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_70():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15070, side=vps)
+
+    expected_state = np.array(
+        [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            30.0,
+            135.0,
+            110.0,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_75():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15075, side=vps)
+
+    expected_state = np.array(
+        [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            30.0,
+            135.0,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_80():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15080, side=vps)
+
+    expected_state = np.array(
+        [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            30.0,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_84():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15084, side=vps)
+
+    expected_state = np.array(
+        [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+def test_bid_85():
+
+    state = EvaluateTradeHistoryEnv_v0.calc_state(now=15085, side=vps)
+
+    expected_state = np.array(
+        [
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+
+
+@pytest.mark.skip
+def test_both_1():
+
+    state = get_balance_test_state(15001)  # type:ignore
+
+    expected_state = np.array(
+        [
+            10.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            10.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+            0.00000000000000,
+        ]
+    )
+
+    assert np.array_equal(state, expected_state)
+

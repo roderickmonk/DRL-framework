@@ -1,0 +1,84 @@
+defaults_:                              ${env:CO3_PATH}/co3-configurations/test/gabe/playback_defaults.yaml
+
+playbacks:
+  ddpg_parabola_tool_network:
+    misc:
+      csv_path:                         null
+      generate_csv:                     False
+      leave_progress_bar:               True
+      log_interval:                     100000
+      log_level:                        INFO 
+      seed:                             7
+      record_state:                     False
+    agent:
+      agent:                            investigate_agent
+      action_noise:
+        type:                           OrnsteinUhlenbeck 
+        sigma:                          0.02
+      batch_size:                       1
+      buffer_size:                      1
+      gamma:                            0.99 # Bellman discount factor
+      gradient_clipping:
+          max_norm:                     1.0
+          norm_type:                    2.0
+      purge_network:                    True
+      network:                          networks/test_1.pt
+      training:                         True
+      training_interval:                1 # Number of steps between trainings of the network
+      target_update_interval:           1 # Number of trainings between updating the target
+
+      episodes:                         5
+      torch_models:
+        Actor:
+          hidden_dims:                  [400, 300]
+          activations:                  [nn.ReLU]
+        Critic:
+          name:                         LayerNorm2
+          hidden_dims:                  [400, 300]
+          activations:                  [nn.ReLU]
+      actor_lr:                         3e-5
+      critic_lr:                        0.00001
+      tau:                              0.001
+      policy_noise:                     0.02
+      noise_clip:                       0.5
+      exploration:                      100
+
+    env_config:
+      env_name:                         sentient_gym:PredeterminedActionsAndRewardsEnv-v0
+      episode_type:                     default_episode
+      is_buy:                           False
+      ql:                               0.2
+      datasets:                         [datasets/evaluate/eth_with_actions_targets_training.json]
+      precision:                        8
+      action_space_low:                 0.02
+      action_space_high:                0.98
+      reward_offset:                    1.0
+      randomize_dataset_reads:          False
+      pdf:
+        name:                           pdf-ddpg
+        market:                         btc-eth
+        start_window:                   90 # days
+        start_range:                    2018-01-15T12:30:00
+        end_range:                      2019-07-15T13:00:00
+        age_limit:                      360 # days, can be decimal; e.g. 0.25 = 6 hrs
+        bins:                           auto
+        graph:                          True
+        envId:                          0
+        exchange:                       bittrex
+
+    child_process:
+      launch_delay:                     0
+      launch_interval:                  1
+      env_config:
+        randomize_dataset_reads:        False
+        datasets:                       [datasets/evaluate/eth_with_actions_targets_test.json]
+      misc:
+        csv_path:                       rewards/investigate
+        generate_csv:                   True
+        log_interval:                   100000
+      agent:
+        episodes:                       20000
+        purge_network:                  False
+        batch_size:                     20000
+        buffer_size:                    20000
+ 

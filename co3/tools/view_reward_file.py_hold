@@ -1,0 +1,149 @@
+"""   #!/usr/bin/env python   """
+
+import json
+import os
+
+import numpy as np
+import pandas as pd
+
+
+class Dataset:
+
+    dataset_data = {"index": [], "state": [], "it": []}
+    dataset_file = None
+
+    @staticmethod
+    def save():
+
+        # Remove any previous version
+        try:
+            os.remove(Dataset.dataset_file)
+        except FileNotFoundError:
+            pass
+
+        json_data = json.dumps(Dataset.dataset_data)
+        with open(Dataset.dataset_file, "w") as fp:
+            fp.write(json_data)
+            fp.close()
+
+    def __init__(self, *, evaluate: bool):
+        self.evaluate = evaluate
+
+    def read(self, *, source: str) -> pd.core.frame.DataFrame:
+        """Loads a file into a pandas DataFrame"""
+
+        if source in self.ls():
+
+            with open(self._dataset_file(dataset=source), "r") as fp:
+                dataset = json.load(fp)
+
+            index = dataset.pop("index", None)
+
+            df = pd.DataFrame(dataset, index=index, columns=dataset.keys())
+
+            if hasattr(df, "state"):
+                if not all(
+                    len(element) == len(df.state.values[0])
+                    for element in df.state.values
+                ):
+                    raise ValueError("Dataset constains inconsistent state sizes")
+
+            if hasattr(df, "ob_vector"):
+                if not all(
+                    len(element) == len(df.ob_vector.values[0])
+                    for element in df.ob_vector.values
+                ):
+                    raise ValueError("Dataset constains inconsistent ob_vector sizes")
+
+            return df
+
+        else:
+            raise RuntimeError(f"{source=} not found")
+
+    ls = lambda self: [
+        dataset.split(".")[0]
+        for dataset in sorted(
+            os.listdir(
+                "/".join(
+                    [
+                        os.environ.get("CO3_PATH"),
+                        "datasets",
+                        "evaluate" if self.evaluate else "balance",
+                    ]
+                )
+            ),
+            key=str.lower,
+        )
+    ]
+
+    def purge(self, *, dataset: str):
+        # Delete the dataset from the list of datasets
+
+        try:
+            os.remove(self._dataset_file(dataset=dataset))
+        except FileNotFoundError:
+            pass
+
+    def persist(
+        self, *, source: pd.core.frame.DataFrame, dest: str, overwrite: bool = False
+    ) -> bool:
+        """Save a DataFrame to file"""
+
+        assert overwrite or not os.exists(
+            self._dataset_file(dest)
+        ), f"Data-set {dest=} already exists"
+
+        self.purge(dataset=dest)
+
+        dataset_data = {"index": []}
+
+        for index, row in source.iterrows():
+
+            dataset_data["index"].append(index)
+
+            # Peel the data from the DF column by column
+            for column in source.columns:
+
+                if column not in dataset_data:
+                    if isinstance(row[column], np.ndarray):
+                        dataset_data[column] = [
+                            [r.item() for r in row[column].tolist()]
+                        ]
+                    else:
+                        dataset_data[column] = [row[column]]
+                else:
+                    if isinstance(row[column], np.ndarray):
+                        dataset_data[column].append(
+                            [r.item() for r in row[column].tolist()]
+                        )
+                    else:
+                        dataset_data[column].append(row[column])
+
+        # Save to a file
+        json_data = json.dumps(dataset_data)
+        with open(self._dataset_file(dataset=dest), "w") as fp:
+            fp.write(json_data)
+
+    def _dataset_file(self, *, dataset):
+
+        # Define the location of the dataset
+        dataset_path = "/".join(
+            [
+                os.environ.get("CO3_PATH"),
+                "datasets",
+                "evaluate" if self.evaluate else "balance",
+            ]
+        )
+        os.makedirs(dataset_path, mode=0o755, exist_ok=True)
+
+        return "/".join([dataset_path, dataset + ".json"])
+
+
+if __name__ == "__main__":
+
+    file = "./rewards/reward_file.csv"
+
+    df = pd.read_csv(file)
+
+    print(df.tail(50))
+

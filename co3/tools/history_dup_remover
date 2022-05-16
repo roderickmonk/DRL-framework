@@ -1,0 +1,133 @@
+#!/usr/bin/env python
+import warnings
+
+warnings.filterwarnings("ignore", category=UserWarning)
+
+import logging
+import os
+from typing import Generator
+
+from sentient_util import logger
+from dateutil.parser import parse
+from pymongo import MongoClient
+from datetime import timedelta
+from sentient_util.constants import BITTREX_EPOCH_BOUNDARY
+
+START_RANGE = parse("2021-03-24T14:30:00")
+END_RANGE = parse("2021-03-25T17:30:00")
+LOG_INTERVAL = 200
+
+primary_mongo = MongoClient(host=os.environ["MONGODB"])
+primary_history_db = primary_mongo["history"]
+orderbooks_coll = primary_history_db["BittrexV3Orderbooks"]
+
+
+class DupRemover:
+
+    query_header = {
+        "e": 0,
+        "x": "bittrex",
+    }
+
+    def __init__(self):
+
+        self.cursor = orderbooks_coll.find(
+            {
+                **self.query_header,
+                "$and": [{"ts": {"$gte": START_RANGE}}, {"ts": {"$lt": END_RANGE}}],
+            },
+            {"buy": 0, "sell": 0},
+            no_cursor_timeout=True,
+        ).sort([("e", 1), ("x", 1), ("m", 1), ("ts", 1)])
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, _1, _2, _3):
+        return
+
+    def generator(self) -> Generator:
+        while (orderbook := next(self.cursor)) :
+            yield orderbook
+
+
+if __name__ == "__main__":
+
+    logger.setup()
+
+    orderbooks_removed = 0
+
+    def log(orderbook):
+        logging.warning(
+            f"Trimmed: {orderbooks_removed:4}, ({orderbook['ts'].isoformat('T', 'seconds')})"
+        )
+
+    try:
+
+        to_be_deleted = []
+
+        with DupRemover() as dup_remover:
+
+            junkgen = dup_remover.generator()
+
+            while bool(orderbook := next(junkgen)):
+
+                repeat_orderbooks = list(
+                    orderbooks_coll.find(
+                        {
+                            "$and": [
+                                {"e": orderbook["e"]},
+                                {"x": orderbook["x"]},
+                                {"m": orderbook["m"]},
+                                {
+                                    "ts": {
+                                        "$gte": orderbook["ts"] - timedelta(seconds=1)
+                                    }
+                                },
+                                {
+                                    "ts": {
+                                        "$lte": orderbook["ts"] + timedelta(seconds=1)
+                                    }
+                                },
+                                {"_id": {"$ne": orderbook["_id"]}},
+                                {"S": {"$eq": orderbook["S"]}},
+                            ]
+                        },
+                        {"buy": 0, "sell": 0},
+                    )
+                )
+
+                for r in repeat_orderbooks:
+
+                    if r["_id"] not in to_be_deleted:
+
+                        to_be_deleted.append(r["_id"])
+
+                    if len(to_be_deleted) % 400 == 0:
+                        print(
+                            f"{r['_id']=}, "
+                            f"{r['m']=}, "
+                            f"{r['ts']=}, "
+                            f"{r['S']=}, "
+                            f"{len(to_be_deleted)=}",
+                        )
+
+                        try:
+                            orderbooks_coll.delete_many(
+                                {"_id": {"$in": to_be_deleted[:-200]}}
+                            )
+                            print("delete successful")
+                        except Exception as msg:
+                            print(f"failure message: {msg=}")
+                            raise
+                        finally:
+                            to_be_deleted = to_be_deleted[-200:]
+
+        print(f"len of to be deleted: {len(to_be_deleted)=}")
+
+    except RuntimeError:  # Stop Iteration
+        pass
+
+    finally:
+        logging.warning("✨That's✨All✨Folks✨")
+

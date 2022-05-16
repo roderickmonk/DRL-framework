@@ -1,0 +1,25 @@
+{
+  "name": "co3",
+  "version": "3.0.0",
+  "description": "_co3",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "pytests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/1057405bcltd/co3.git"
+  },
+  "author": "Rod Monk <roderickmonk@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/1057405bcltd/co3/issues"
+  },
+  "homepage": "https://github.com/1057405bcltd/co3#readme",
+  "dependencies": {
+    "onnxruntime-node": "^1.9.0"
+  }
+}

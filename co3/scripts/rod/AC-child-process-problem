@@ -1,0 +1,148 @@
+#!/bin/bash
+
+mprof run co3.py \
+episodes=100000000 \
+child_process_launch_interval=1000 \
+generate_csv=false \
+child_process_config_path=/shared/co3/co3-configurations/test/gabe/child-config/co3-child-memtest.yaml \
+order_depths=order_depths_5
+
+# Parent / Child: 10 child processes, csv files captured only for the children
+time CO3_CONFIG_PATH=$CO3_YAML main.py \
+child_process_launch_interval=10000 \
+episodes=100000 \
+generate_csv=False \
+log_interval=1000 \
+network=child-test \
+network_save_interval=10000000 \
+purge_network=True
+
+# Manual Training: csv file not captured
+time CO3_CONFIG_PATH=$CO3_YAML main.py \
+episodes=100000 \
+generate_csv=False \
+log_interval=1000 \
+network=manual-network \
+network_save_interval=10000000 \
+purge_network=True \
+training=True
+
+# Manual Testing: csv file captured
+time CO3_CONFIG_PATH=$CO3_YAML main.py \
+datasets=[test_set_snt] \
+episodes=21400 \
+generate_csv=True \
+log_interval=1000 \
+network=manual-network \
+purge_network=False \
+randomize_dataset_reads=False \
+record_state=False \
+training=False
+
+# Display the last line of each csv
+ls rewards/*.csv | xargs tail -n 1
+
+# Parent / Child: 10 child processes, csv files captured only for the children
+time CO3_CONFIG_PATH=$CO3_YAML main.py \
+child_process_launch_interval=10000 \
+episodes=100000 \
+generate_csv=False \
+log_interval=1000 \
+network=child-test \
+network_save_interval=10000000 \
+purge_network=True
+
+# Manual Training: csv file not captured
+time CO3_CONFIG_PATH=$CO3_YAML main.py \
+episodes=100000 \
+generate_csv=False \
+log_interval=1000 \
+network=manual-network \
+network_save_interval=10000000 \
+purge_network=True \
+training=True
+
+# Manual Testing: csv file captured
+time CO3_CONFIG_PATH=$CO3_YAML main.py \
+datasets=[test_set_snt] \
+episodes=21400 \
+generate_csv=True \
+log_interval=1000 \
+network=manual-network \
+purge_network=False \
+randomize_dataset_reads=False \
+record_state=False \
+training=False
+
+# Display the last line of each csv
+ls rewards/*.csv | xargs tail -n 1
+
+# Parent / Child: 10 child processes, csv files captured only for the children
+time CO3_CONFIG_PATH=$CO3_YAML main.py \
+child_process_launch_interval=10000 \
+episodes=100000 \
+generate_csv=False \
+log_interval=1000 \
+network=child-test \
+network_save_interval=10000000 \
+purge_network=True
+
+# Manual Training: csv file not captured
+time CO3_CONFIG_PATH=$CO3_YAML main.py \
+episodes=100000 \
+generate_csv=False \
+log_interval=1000 \
+network=manual-network \
+network_save_interval=10000000 \
+purge_network=True \
+training=True
+
+# Manual Testing: csv file captured
+time CO3_CONFIG_PATH=$CO3_YAML main.py \
+datasets=[test_set_snt] \
+episodes=21400 \
+generate_csv=True \
+log_interval=1000 \
+network=manual-network \
+purge_network=False \
+randomize_dataset_reads=False \
+record_state=False \
+training=False
+
+# Display the last line of each csv
+ls rewards/*.csv | xargs tail -n 1
+
+# Parent / Child: 10 child processes, csv files captured only for the children
+time CO3_CONFIG_PATH=$CO3_YAML main.py \
+child_process_launch_interval=10000 \
+episodes=100000 \
+generate_csv=False \
+log_interval=1000 \
+network=child-test \
+network_save_interval=10000000 \
+purge_network=True
+
+# Manual Training: csv file not captured
+time CO3_CONFIG_PATH=$CO3_YAML main.py \
+episodes=100000 \
+generate_csv=False \
+log_interval=1000 \
+network=manual-network \
+network_save_interval=10000000 \
+purge_network=True \
+training=True
+
+# Manual Testing: csv file captured
+time CO3_CONFIG_PATH=$CO3_YAML main.py \
+datasets=[test_set_snt] \
+episodes=21400 \
+generate_csv=True \
+log_interval=1000 \
+network=manual-network \
+purge_network=False \
+randomize_dataset_reads=False \
+record_state=False \
+training=False
+
+# Display the last line of each csv
+ls rewards/*.csv | xargs tail -n 1

@@ -1,0 +1,11 @@
+play03 \
+algorithm=q \
+episodes=100000000 \
+generate_csv=false \
+child_process.csv_path=QR/NN/200_5A32Nodes \
+network=QR2005A32NNodes \
+order_depths=order_depths_3 \
+qrdqn.quantile_resolution=200 \
+network_nodes=32 \
+nn_trace.active=True \
+nn_trace.target_directory=QR/200_5A32Nodes 

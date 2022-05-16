@@ -1,0 +1,6 @@
+main.py \
+episodes=11000000 \
+generate_csv=false \
+network=7A11MSeed1337 \
+order_depths=order_depths_4 \
+seed=1337

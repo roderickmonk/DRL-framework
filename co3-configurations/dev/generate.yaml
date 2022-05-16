@@ -1,0 +1,243 @@
+generators:
+  scenario_1:
+    env:                            sentient_gym:OrderbookHistoryEnv-v0
+    destination:                    /datasets/test/scenario_1.json
+    log_interval:                   200
+    ql:                             0.2
+    is_buy:                         False
+    precision:                      8
+    env_config:
+      envId:                        0
+      exchange:                     bittrex
+      market:                       btc-eth
+      start_range:                  2019-07-15T00:00:00
+      end_range:                    2019-07-15T01:30:00
+      n:                            10
+      k:                            1.5
+      side:                         sell # [ buy | sell | ob ]
+
+  scenario_2:
+    env:                            sentient_gym:EvaluateTradeHistoryEnv-v0
+    log_interval:                   200
+    destination:                    /datasets/test/scenario_2.json        
+    env_config:
+      evaluate:                     True
+      order_depths:                 order_depths_0
+      time_breaks:                  time_breaks_0
+      envId:                        0    
+      exchange:                     bittrex
+      market:                       btc-eth
+      start:                        2019-07-15
+      start_range:                  2019-07-10T12:00:00
+      end_range:                    2019-07-15T02:00:00
+      ql:                           0.2
+
+  scenario_3:
+    env:                            sentient_gym:OrderbookHistoryEnv-v0
+    destination:                    /datasets/test/scenario_3.json
+    log_interval:                   200
+    ql:                             0.2
+    is_buy:                         null
+    precision:                      8
+
+    env_config:
+      envId:                        0
+      exchange:                     bittrex
+      market:                       btc-eth
+      start_range:                  2019-07-15T12:30:00
+      end_range:                    2019-07-15T13:00:00
+      n:                            20
+      k:                            1.5
+      side:                         sell # [ buy | sell | ob ]
+
+  scenario_4:
+    env:                            sentient_gym:OrderbookHistoryEnv-v0
+    destination:                    /datasets/test/scenario_4.json
+    log_interval:                   200
+    ql:                             0.2
+    is_buy:                         null
+    precision:                      8
+
+    env_config:
+      envId:                        0
+      exchange:                     bittrex
+      market:                       btc-eth
+      start_range:                  2019-07-15T12:30:00
+      end_range:                    2019-07-15T13:00:00
+      n:                            20
+      k:                            1.5
+      side:                         buy # [ buy | sell | ob ]
+
+  scenario_5:
+    env:                            sentient_gym:OrderbookHistoryEnv-v0
+    destination:                    /datasets/test/scenario_5.json
+    log_interval:                   200
+    ql:                             0.2
+    is_buy:                         null
+    precision:                      8
+
+    env_config:
+      envId:                        0
+      exchange:                     bittrex
+      market:                       btc-eth
+      start_range:                  2021-07-15T12:30:00
+      end_range:                    2021-07-17T13:00:00
+      n:                            20
+      k:                            1.5
+      side:                         sell # [ buy | sell | ob ]
+
+  training_dataset:
+    env:                            sentient_gym:OrderbookHistoryEnv-v0
+    destination:                    /datasets/training_dataset.json
+    log_interval:                   200
+    ql:                             0.2
+    is_buy:                         False
+    precision:                      8
+    env_config:
+      envId:                        0
+      exchange:                     bittrex
+      market:                       btc-eth
+      start_range:                  2019-07-13T00:00:00
+      end_range:                    2019-07-17T00:00:00
+      n:                            5
+      k:                            1.5
+      side:                         sell # [ buy | sell | ob ]
+
+  test_dataset:
+    env:                            sentient_gym:OrderbookHistoryEnv-v0
+    destination:                    /datasets/test_dataset.json
+    log_interval:                   200
+    ql:                             0.2
+    is_buy:                         False
+    precision:                      8
+    env_config:
+      envId:                        0
+      exchange:                     bittrex
+      market:                       btc-eth
+      start_range:                  2019-07-17T00:00:00
+      end_range:                    2019-07-17T04:00:00
+      n:                            5
+      k:                            1.5
+      side:                         sell # [ buy | sell | ob ]
+
+  v3_dataset:
+    env:                            sentient_gym:OrderbookHistoryEnv-v0
+    destination:                    /datasets/v3_dataset.json
+    log_interval:                   200
+    ql:                             0.2
+    is_buy:                         False
+    precision:                      8
+    env_config:
+      envId:                        0
+      exchange:                     bittrex
+      market:                       btc-eth
+      start_range:                  2021-03-10T00:00:00
+      end_range:                    2021-03-10T01:00:00
+      n:                            5
+      k:                            1.5
+      side:                         sell # [ buy | sell | ob ]
+
+  ob_dataset:
+    env:                            sentient_gym:OrderbookHistoryEnv-v0
+    destination:                    /datasets/ob_dataset.json
+    log_interval:                   20
+    ql:                             0.2
+    is_buy:                         False
+    precision:                      8
+    env_config:
+      envId:                        0
+      exchange:                     bittrex
+      market:                       btc-eth
+      start_range:                  2021-03-10T00:00:00
+      end_range:                    2021-03-10T01:00:00
+      n:                            5
+      k:                            1.5
+      side:                         ob # [ buy | sell | ob ]
+
+  eth_2019-06-01T00_00_00_2021-09-01T00_00_00_sell_20:
+    env:                            sentient_gym:OrderbookHistoryEnv-v0
+    destination:                    /datasets/eth_2019-06-01T00_00_00_2021-09-01T00_00_00_sell_20.json
+    log_interval:                   20
+    ql:                             0.2
+    is_buy:                         False
+    precision:                      8
+    env_config:
+      envId:                        0
+      exchange:                     bittrex
+      market:                       btc-eth
+      start_range:                  2019-06-01T00:00:00
+      end_range:                    2019-09-01T00:00:00
+      n:                            20
+      k:                            2
+      side:                         sell # [ buy | sell | ob ]
+        
+  eth_2019-06-01T00_00_00_2021-09-01T00_00_00_sell_40:
+    env:                            sentient_gym:OrderbookHistoryEnv-v0
+    destination:                    /datasets/eth_2019-06-01T00_00_00_2021-09-01T00_00_00_sell_40.json
+    log_interval:                   20
+    ql:                             0.2
+    is_buy:                         False
+    precision:                      8
+    env_config:
+      envId:                        0
+      exchange:                     bittrex
+      market:                       btc-eth
+      start_range:                  2019-06-01T00:00:00
+      end_range:                    2019-09-01T00:00:00
+      n:                            40
+      k:                            2
+      side:                         sell # [ buy | sell | ob ]
+
+  eth_2019-07-10_2021-08-10_sell_n_8:
+    env:                            sentient_gym:OrderbookHistoryEnv-v0
+    destination:                    /datasets/eth_2019-07-10_2021-08-10_sell_n_8.json
+    log_interval:                   200
+    is_buy:                         False
+    precision:                      8
+    env_config:
+      envId:                        0
+      exchange:                     bittrex
+      market:                       btc-eth
+      start_range:                  2019-07-10T00:00:00
+      end_range:                    2019-08-10T00:00:00
+      n:                            8
+      k:                            2
+      side:                         sell # [ buy | sell | ob ]
+
+  eth_2019-07-10-2021-07-12_sell_n_8:
+    env:                            sentient_gym:OrderbookHistoryEnv-v0
+    destination:                    /datasets/eth_2019-07-10-2021-07-12_sell_n_8.json
+    log_interval:                   200
+    is_buy:                         False
+    precision:                      8
+    env_config:
+      envId:                        0
+      exchange:                     bittrex
+      market:                       btc-eth
+      start_range:                  2019-07-10T00:00:00
+      end_range:                    2019-07-12T00:00:00
+      n:                            8
+      k:                            2
+      side:                         sell # [ buy | sell | ob ]
+
+  eth_2019-07-10-2019-07-12_sell_n_16:
+    env:                            sentient_gym:OrderbookHistoryEnv-v0
+    destination:                    /datasets/eth_2019-07-10-2019-07-12_sell_n_16.json
+    log_interval:                   200
+    is_buy:                         False
+    precision:                      8
+    env_config:
+      envId:                        0
+      exchange:                     bittrex
+      market:                       btc-eth
+      start_range:                  2019-07-10T00:00:00
+      end_range:                    2019-07-12T00:00:00
+      n:                            16
+      k:                            2
+      side:                         sell # [ buy | sell | ob ]
+
+console:                            logging
+generator:                          eth_2019-07-10-2019-07-12_sell_n_16
+
+
+
