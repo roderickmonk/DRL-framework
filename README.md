@@ -1,4 +1,4 @@
-# CO3 Module
+# Deep Reinforcement Learning Trading Framework
 
 'CO3' is the project mneumonic that is used throughout.
 
