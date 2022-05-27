@@ -1,23 +1,32 @@
-# Deep Reinforcement Learning Trading Framework
+# Deep Reinforcement Learning Trading Framework (co3)
 
-'CO3' is the project mneumonic that is used throughout.
+## Introduction
+The content of this repository is an extract of a Deep Reinforcement Learning (DRL) framework used for High Frequency Trading (HFT) on cryptocurrency markets.
 
-![Image](./Images/CO3_Repos.png "A View of All CO3-related Repos")
+        `co3` is the project mneumonic that is used throughout.
 
-## Installation
+The project consists of a number of repositories, as represented by the following graphic.  Of the many repositories indicated, only 'co3' - this one - is available publicly.  
 
-### Preparation
 
-Ensure that the following environment variables are defined. For suggestions as to where to set these environment variables, refer to the following document: https://help.ubuntu.com/community/EnvironmentVariables.
+![Image](./Images/CO3_Repos.png "A View of All co3-related Repos")
 
-    MONGODB   # This is the connect string to the database
-    CO3_PATH  # This variable defines the location where the co3 repo is cloned
+The other key repository is referred to as `co3-gym` in the diagram.  `co3-gym` implements a number of environments all dervied from the OpenAI gym framework (https://www.gymlibrary.ml/)
 
-Note: The MONGODB connect string has the form: mongodb://<username>:<password>@<database_host>:<port>/admin?readPreference=primary
+## Theory of Operation ##
+`co3` starts by capturing its configuration from the selected configuration YAML file using OmegaConf (https://github.com/omry/omegaconf)  and then immediately transforming the configuration into a configuration object using pydantic (https://pydantic-docs.helpmanual.io/).
+
+Then based on the configuration, the following is performed:
+1. The selected `gym` environment is activated.
+2. The agent is initiated.  Configuration possibilities allow for both selecting which agent type to be exploited (most of the standard DRL agent's are available) and then within that selection the specific neural network is also configurable (allowing for a straight fully connected networks or with one or more convolutional prefix networks).
+3. And then the agent drops into the classic DRL loop that carries out the number of configured episodes.
+4. As expected, the agent communicates with the selected environment via the usual gym interface (the prime ones being `reset()` and `step()`)  
+
+The project is supported with a number of pytests that can be found in the ./co3/tests folder.
+
 
 ### Python Version
 
-The specific Python version may advance throughout the life of the project and will be noted here. Currently the recommended version is `3.9.10`. Only the first 2 numbers are needed to refer to the Python run-time; in order to avoid duplication, a generic Python version will be referred to below as pythonX.Y.
+The specific Python version may advance throughout the life of the project and will be noted here. Currently the recommended version is `3.10.4`. Only the first 2 numbers are needed to refer to the Python run-time; in order to avoid duplication, a generic Python version will be referred to below as pythonX.Y.
 
 It has been found that the safest and most reliable means to install/upgrade Python is from source. The reader is invited to google "ubuntu install pythonX.Y" for the specifics as to how to install from source.
 
@@ -136,13 +145,4 @@ Remove unused imports and variables
 
         $ autoflake -i -r --remove-all-unused-imports --remove-unused-variables co3
 
-## Testing
-
-It is always worthwhile when taking delivery of new software to be sceptical. A number of pytests have ben defined and these can be carried out as follows:
-
-    $ cd $CO3_PATH
-    $ source project
-    $ pytest co3
-
-Should a test fail, report the number of the failed test case to DEV.
 
