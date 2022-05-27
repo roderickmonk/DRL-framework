@@ -17,7 +17,7 @@ The other key repository is referred to as `co3-gym` in the diagram.  `co3-gym` 
 
 Then based on the configuration, the following is performed:
 1. The selected `gym` environment is activated.
-2. The agent is initiated.  Configuration possibilities allow for both selecting which agent type to be exploited (most of the standard DRL agent's are available) and then within that selection the specific neural network is also configurable (allowing for a straight fully connected networks or with one or more convolutional prefix networks).
+2. The agent is initiated.  Configuration possibilities allow for both selecting which agent type to be exploited (most of the standard DRL agent's are available) and then, within that selection, the specific neural network (allowing for a straight fully connected networks or with one or more convolutional prefix networks).
 3. And then the agent drops into the classic DRL loop that carries out the number of configured episodes.
 4. As expected, the agent communicates with the selected environment via the usual gym interface (the prime ones being `reset()` and `step()`)  
 
