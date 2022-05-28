@@ -1,8 +1,0 @@
-#!/bin/bash
-
-mprof run co3.py \
-episodes=100000000 \
-child_process_launch_interval=1000 \
-generate_csv=false \
-child_process_config_path=/shared/co3/co3-configurations/test/gabe/child-config/co3-child-memtest.yaml \
-order_depths=order_depths_5

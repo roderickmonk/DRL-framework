@@ -1,8 +1,0 @@
-profile-play03 \
-algorithm=q \
-episodes=2001 \
-generate_csv=false \
-network=prof_test \
-order_depths=order_depths_1 \
-qrdqn.quantile_resolution=2 \
-purge_network=true

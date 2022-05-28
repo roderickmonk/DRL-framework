@@ -1,8 +1,0 @@
-play03 \
-algorithm=q \
-episodes=100000000 \
-child_process.csv_path=QR/200_9A \
-generate_csv=false \
-network=QR2009A \
-order_depths=order_depths_5 \
-qrdqn.quantile_resolution=200

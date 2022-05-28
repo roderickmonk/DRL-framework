@@ -1,3 +1,0 @@
-playback \
-playback=qrdqn_32Nodes5Actions \
-agent.network=networks/QR2005A32Nodes \

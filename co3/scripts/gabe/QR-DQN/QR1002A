@@ -1,9 +1,0 @@
-play03 \
-algorithm=q \
-episodes=100000000 \
-child_process_launch_interval=100000 \
-generate_csv=false \
-child_process_config_path=/shared/co3/co3-configurations/test/gabe/child-config/QR/co3-child-QR1002A.yaml \
-network=QR1002A \
-order_depths=order_depths_1 \
-qrdqn.quantile_resolution=100

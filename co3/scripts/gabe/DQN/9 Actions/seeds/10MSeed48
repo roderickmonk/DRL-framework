@@ -1,6 +1,0 @@
-main.py \
-episodes=10000000 \
-generate_csv=false \
-network=9A10MSeed48 \
-order_depths=order_depths_5 \
-seed=48

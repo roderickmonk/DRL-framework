@@ -1,5 +1,0 @@
-main.py \
-episodes=9000000 \
-generate_csv=false \
-network=5A11MSeed30035 \
-seed=30035

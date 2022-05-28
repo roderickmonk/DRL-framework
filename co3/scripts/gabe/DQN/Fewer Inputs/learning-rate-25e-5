@@ -1,8 +1,0 @@
-main.py \
-episodes=10000000 \
-generate_csv=false \
-network=inputs10ML25e-5 \
-learning_rate=0.00025 \
-datasets=[alt_training_set_snt] \
-time_breaks=time_breaks_2 \
-order_depths=order_depths_1

@@ -1,3 +1,0 @@
-playback \
-+GAC.train_interval=1000 \
-child_process.csv_path=GAC/1000tinterval \

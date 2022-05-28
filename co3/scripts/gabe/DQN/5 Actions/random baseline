@@ -1,9 +1,0 @@
-main.py \
-learning_rate=0 \
-eps_end=1 \
-episodes=20000 \
-log_interval=1000 \
-randomize_dataset_reads=false \
-datasets=[test_set_snt] \
-csv_path=5A \
-network=randombaseline
